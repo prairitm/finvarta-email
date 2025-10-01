@@ -21,6 +21,7 @@ This guide will help you deploy your FastAPI Corporate Announcements Processor t
    - Select "Deploy from GitHub repo"
    - Choose your `finvarta-email` repository
    - Railway will automatically detect it's a Python project
+   - **Important**: Make sure to push all the new configuration files (railway.json, nixpacks.toml, .dockerignore) to your repository
 
 3. **Configure Environment Variables**
    - Go to your project dashboard
