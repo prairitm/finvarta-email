@@ -4,6 +4,7 @@ PyPDF2
 openai
 python-dotenv
 fastapi
-uvicorn
+uvicorn[standard]
 reportlab
 pytz
+gunicorn
