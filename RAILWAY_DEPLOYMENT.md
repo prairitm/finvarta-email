@@ -135,10 +135,16 @@ curl -X POST "https://your-app-name.up.railway.app/process?use_sample_data=true"
    - Verify variables are set in Railway dashboard
    - Check variable names match exactly (case-sensitive)
 
-3. **Email Not Sending**
+3. **Email Not Sending - Network Unreachable (Errno 101)**
+   - Railway's network may block outbound SMTP connections on port 587
+   - The app automatically tries port 465 (SSL) as fallback
+   - **Solution 1**: Use an email service API instead of SMTP (recommended)
+     - Consider: SendGrid, Mailgun, Postmark, AWS SES
+   - **Solution 2**: Use Railway's TCP Proxy for outbound connections
+   - **Solution 3**: Set `EMAIL_SMTP_PORT=465` environment variable to use SSL directly
    - Verify email credentials are correct
    - For Gmail, use App Password instead of regular password
-   - Check Railway logs for error messages
+   - Check Railway logs for detailed error messages
 
 4. **OpenAI API Errors**
    - Verify your API key is valid and has credits

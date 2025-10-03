@@ -420,10 +420,26 @@ def send_email_with_pdf(pdf_filename=PDF_OUTPUT_FILE):
         return False
     
     try:
-        # Connect to SMTP server once
-        server = smtplib.SMTP(EMAIL_SMTP_SERVER, EMAIL_SMTP_PORT)
-        server.starttls()
+        # Try port 587 (TLS) first, then fall back to port 465 (SSL)
+        server = None
+        try:
+            print(f"🔌 Attempting to connect to {EMAIL_SMTP_SERVER}:{EMAIL_SMTP_PORT}...")
+            server = smtplib.SMTP(EMAIL_SMTP_SERVER, EMAIL_SMTP_PORT, timeout=30)
+            server.ehlo()
+            server.starttls()
+            server.ehlo()
+            print("✅ Connected via STARTTLS (port 587)")
+        except Exception as e:
+            print(f"⚠️  Port 587 failed ({e}), trying SSL port 465...")
+            try:
+                server = smtplib.SMTP_SSL(EMAIL_SMTP_SERVER, 465, timeout=30)
+                print("✅ Connected via SSL (port 465)")
+            except Exception as e2:
+                print(f"❌ Both ports failed. Port 587: {e}, Port 465: {e2}")
+                raise Exception(f"Could not connect to email server on any port")
+        
         server.login(EMAIL_SENDER, EMAIL_PASSWORD)
+        print("✅ Logged in successfully")
         
         successful_sends = 0
         
